@@ -8,7 +8,8 @@
     "test": "hardhat test",
     "node": "hardhat node",
     "deploy:localhost": "hardhat run scripts/deploy.js --network localhost",
-    "deploy:hardhat": "hardhat run scripts/deploy.js"
+    "deploy:hardhat": "hardhat run scripts/deploy.js",
+    "sync:frontend": "node scripts/syncFrontend.js"
   },
   "license": "MIT",
   "devDependencies": {

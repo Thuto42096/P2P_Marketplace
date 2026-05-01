@@ -55,6 +55,13 @@ async function main() {
   const outFile = path.join(outDir, `${network.name}.json`);
   fs.writeFileSync(outFile, JSON.stringify(deployment, null, 2));
   console.log(`Wrote deployment manifest to:   ${outFile}`);
+
+  // Mirror ABIs + addresses into the frontend (best-effort).
+  try {
+    require("./syncFrontend.js");
+  } catch (e) {
+    console.warn(`(syncFrontend skipped: ${e.message})`);
+  }
 }
 
 main().catch((err) => {
