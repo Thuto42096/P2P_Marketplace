@@ -1,0 +1,25 @@
+node_modules/
+.env
+.env.local
+coverage/
+coverage.json
+typechain/
+typechain-types/
+cache/
+artifacts/
+
+# Hardhat Ignition
+ignition/deployments/chain-*
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Frontend (added in later phases)
+frontend/node_modules/
+frontend/.next/
+frontend/dist/
+frontend/build/
