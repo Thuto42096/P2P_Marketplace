@@ -1,19 +1,40 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import {
+  useAccount,
+  useChainId,
+  useConnect,
+  useConnections,
+  useDisconnect,
+  useSwitchChain,
+} from "wagmi";
 import hero from "../assets/hero.png";
+
+function shortAddress(addr) {
+  if (!addr) return "";
+  return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+}
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
+  const { connectors, connect, isPending, variables, error } = useConnect();
+  const { disconnect } = useDisconnect();
+  const chainId = useChainId();
+  const { chains, switchChain } = useSwitchChain();
+  useConnections();
 
   const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
     if (isConnected) navigate(from, { replace: true });
   }, [isConnected, from, navigate]);
+
+  const supportedChain = chains.find((c) => c.id === chainId);
+  const visibleConnectors = connectors.filter(
+    (c, i, arr) => arr.findIndex((x) => x.id === c.id) === i
+  );
 
   return (
     <div className="min-h-full grid lg:grid-cols-2">
@@ -62,74 +83,64 @@ export default function Login() {
             </p>
 
             <div className="mt-8">
-              <ConnectButton.Custom>
-                {({
-                  account,
-                  chain,
-                  openAccountModal,
-                  openChainModal,
-                  openConnectModal,
-                  authenticationStatus,
-                  mounted,
-                }) => {
-                  const ready =
-                    mounted && authenticationStatus !== "loading";
-                  const connected =
-                    ready &&
-                    account &&
-                    chain &&
-                    (!authenticationStatus ||
-                      authenticationStatus === "authenticated");
-
-                  return (
-                    <div
-                      aria-hidden={!ready}
-                      style={{
-                        opacity: ready ? 1 : 0,
-                        pointerEvents: ready ? "auto" : "none",
-                        userSelect: ready ? "auto" : "none",
-                      }}
-                    >
-                      {!connected ? (
+              {!isConnected ? (
+                <div className="space-y-2">
+                  {visibleConnectors.length === 0 ? (
+                    <p className="text-sm text-fb-subtle text-center">
+                      No wallet detected. Install MetaMask or another browser
+                      wallet, then refresh.
+                    </p>
+                  ) : (
+                    visibleConnectors.map((connector) => {
+                      const pendingThis =
+                        isPending && variables?.connector?.id === connector.id;
+                      return (
                         <button
+                          key={connector.uid}
                           type="button"
-                          onClick={openConnectModal}
-                          className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-fb-accent text-white font-semibold text-base hover:bg-fb-accentHover transition-colors"
+                          onClick={() => connect({ connector })}
+                          disabled={isPending}
+                          className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-xl bg-fb-accent text-white font-semibold text-base hover:bg-fb-accentHover transition-colors disabled:opacity-60"
                         >
                           <WalletIcon />
-                          Connect wallet
+                          {pendingThis
+                            ? "Connecting…"
+                            : `Connect ${connector.name}`}
                         </button>
-                      ) : chain.unsupported ? (
-                        <button
-                          type="button"
-                          onClick={openChainModal}
-                          className="w-full inline-flex items-center justify-center h-12 rounded-xl bg-fb-danger text-white font-semibold text-base hover:opacity-90 transition-opacity"
-                        >
-                          Wrong network — switch
-                        </button>
-                      ) : (
-                        <div className="space-y-3">
-                          <button
-                            type="button"
-                            onClick={openAccountModal}
-                            className="w-full inline-flex items-center justify-between h-12 px-4 rounded-xl border border-fb-border bg-fb-bg text-fb-text font-medium hover:bg-white"
-                          >
-                            <span className="truncate">
-                              {account.displayName}
-                            </span>
-                            <span className="text-xs text-fb-subtle">
-                              {chain.name}
-                            </span>
-                          </button>
-                          <p className="text-xs text-center text-fb-subtle">
-                            Redirecting to your dashboard…
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  );
-                }}
-              </ConnectButton.Custom>
+                      );
+                    })
+                  )}
+                  {error ? (
+                    <p className="text-xs text-fb-danger text-center">
+                      {error.shortMessage || error.message}
+                    </p>
+                  ) : null}
+                </div>
+              ) : !supportedChain ? (
+                <button
+                  type="button"
+                  onClick={() => switchChain({ chainId: chains[0].id })}
+                  className="w-full inline-flex items-center justify-center h-12 rounded-xl bg-fb-danger text-white font-semibold text-base hover:opacity-90 transition-opacity"
+                >
+                  Wrong network — switch
+                </button>
+              ) : (
+                <div className="space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => disconnect()}
+                    className="w-full inline-flex items-center justify-between h-12 px-4 rounded-xl border border-fb-border bg-fb-bg text-fb-text font-medium hover:bg-white"
+                  >
+                    <span className="truncate">{shortAddress(address)}</span>
+                    <span className="text-xs text-fb-subtle">
+                      {supportedChain.name}
+                    </span>
+                  </button>
+                  <p className="text-xs text-center text-fb-subtle">
+                    Redirecting to your dashboard…
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="mt-6 pt-6 border-t border-fb-border">

@@ -1,10 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount, useChainId, useDisconnect } from "wagmi";
 import { useSearch } from "../lib/searchContext.js";
+
+function shortAddress(addr) {
+  if (!addr) return "";
+  return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+}
 
 export default function Header() {
   const { search, setSearch } = useSearch();
   const navigate = useNavigate();
+  const { address, isConnected, chain } = useAccount();
+  const chainId = useChainId();
+  const { disconnect } = useDisconnect();
 
   return (
     <header className="bg-fb-surface border-b border-fb-border sticky top-0 z-30">
@@ -44,11 +52,28 @@ export default function Header() {
         </div>
 
         <div className="ml-auto">
-          <ConnectButton
-            accountStatus="address"
-            chainStatus="icon"
-            showBalance={false}
-          />
+          {isConnected ? (
+            <button
+              type="button"
+              onClick={() => disconnect()}
+              title="Disconnect"
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-full border border-fb-border bg-fb-bg text-fb-text text-sm font-medium hover:bg-white"
+            >
+              <span className="truncate max-w-[120px]">
+                {shortAddress(address)}
+              </span>
+              <span className="text-xs text-fb-subtle hidden sm:inline">
+                {chain?.name ?? `Chain ${chainId}`}
+              </span>
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="inline-flex items-center h-9 px-4 rounded-full bg-fb-accent text-white text-sm font-semibold hover:bg-fb-accentHover transition-colors"
+            >
+              Connect
+            </Link>
+          )}
         </div>
       </div>
     </header>
