@@ -144,7 +144,7 @@ export default function CreateListing() {
         )}
       </form>
 
-      <style>{`.input{display:block;width:100%;padding:.55rem .75rem;border:1px solid #dddfe2;border-radius:.5rem;font-size:.9rem;background:#fff;outline:none}.input:focus{border-color:#1877f2;box-shadow:0 0 0 3px rgba(24,119,242,.15)}`}</style>
+      <style>{`.input{display:block;width:100%;padding:.55rem .75rem;border:1px solid #ede9fe;border-radius:.5rem;font-size:.9rem;background:#fff;outline:none}.input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.15)}`}</style>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
   useSwitchChain,
 } from "wagmi";
 import hero from "../assets/hero.png";
+import hero2 from "../assets/hero2.png";
 
 function shortAddress(addr) {
   if (!addr) return "";
@@ -38,7 +39,7 @@ export default function Login() {
 
   return (
     <div className="min-h-full grid lg:grid-cols-2">
-      <aside className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-fb-accent to-blue-700 text-white p-12">
+      <aside className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-fb-accent to-fb-success text-white p-12">
         <div className="text-3xl font-extrabold tracking-tight">ChainMart</div>
 
         <div className="space-y-6 max-w-md">
@@ -50,14 +51,24 @@ export default function Login() {
             contract until the buyer confirms receipt. No middlemen, no
             chargebacks.
           </p>
-          <img
-            src={hero}
-            alt=""
-            className="rounded-xl shadow-cardHover w-full max-w-sm opacity-95"
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-            }}
-          />
+          <div className="grid grid-cols-2 gap-3 max-w-sm">
+            <img
+              src={hero}
+              alt=""
+              className="rounded-xl shadow-cardHover w-full opacity-95"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+            <img
+              src={hero2}
+              alt=""
+              className="rounded-xl shadow-cardHover w-full opacity-95"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
         </div>
 
         <p className="text-xs text-white/70">

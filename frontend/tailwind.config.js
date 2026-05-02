@@ -5,15 +5,16 @@ export default {
     extend: {
       colors: {
         fb: {
-          bg: "#f0f2f5",
+          bg: "#faf7ff",
           surface: "#ffffff",
-          border: "#dddfe2",
-          text: "#1c1e21",
-          subtle: "#65676b",
-          accent: "#1877f2",
-          accentHover: "#166fe5",
-          success: "#42b72a",
-          danger: "#e41e3f",
+          border: "#ede9fe",
+          text: "#1f2937",
+          subtle: "#6b7280",
+          accent: "#7c3aed",
+          accentHover: "#6d28d9",
+          success: "#16a34a",
+          successHover: "#15803d",
+          danger: "#dc2626",
         },
       },
       boxShadow: {

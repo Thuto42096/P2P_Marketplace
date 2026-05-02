@@ -27,7 +27,7 @@ export default function Sidebar() {
                 item.primary
                   ? "bg-fb-accent text-white hover:bg-fb-accentHover"
                   : isActive
-                  ? "bg-blue-50 text-fb-accent"
+                  ? "bg-purple-50 text-fb-accent"
                   : "text-fb-text hover:bg-fb-bg",
               ].join(" ")
             }
