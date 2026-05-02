@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { ethers, upgrades } = require("hardhat");
 
 const PRICE = 100n * 10n ** 6n; // 100 mUSDC (6 decimals)
 const MINT_AMOUNT = 1_000n * 10n ** 6n;
@@ -27,7 +27,15 @@ async function deployFixture() {
   await usdc.waitForDeployment();
 
   const Marketplace = await ethers.getContractFactory("Marketplace");
-  const marketplace = await Marketplace.deploy(owner.address);
+  const marketplace = await upgrades.deployProxy(
+    Marketplace,
+    [owner.address],
+    {
+      kind: "uups",
+      initializer: "initialize",
+      unsafeAllow: ["constructor"],
+    }
+  );
   await marketplace.waitForDeployment();
 
   await marketplace.connect(owner).setTokenAllowed(await usdc.getAddress(), true);

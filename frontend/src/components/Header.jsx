@@ -11,9 +11,15 @@ export default function Header() {
       <div className="flex items-center gap-4 px-4 h-14">
         <Link
           to="/"
-          className="text-fb-accent text-2xl font-extrabold tracking-tight shrink-0"
+          className="flex items-baseline gap-2 shrink-0"
+          aria-label="ChainMart home"
         >
-          ChainMart
+          <span className="text-fb-accent text-2xl font-extrabold tracking-tight">
+            ChainMart
+          </span>
+          <span className="hidden lg:inline text-xs text-fb-subtle">
+            P2P stablecoin marketplace
+          </span>
         </Link>
 
         <div className="flex-1 max-w-xl">
@@ -27,8 +33,9 @@ export default function Header() {
                 setSearch(e.target.value);
                 if (window.location.pathname !== "/") navigate("/");
               }}
-              type="text"
-              placeholder="Search Marketplace"
+              type="search"
+              aria-label="Search ChainMart listings"
+              placeholder="Search ChainMart"
               className="w-full pl-10 pr-3 h-10 rounded-full bg-fb-bg border border-transparent
                          focus:bg-white focus:border-fb-border focus:outline-none
                          text-sm placeholder:text-fb-subtle"

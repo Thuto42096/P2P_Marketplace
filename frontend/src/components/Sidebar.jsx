@@ -11,7 +11,7 @@ export default function Sidebar() {
   return (
     <aside className="hidden md:flex flex-col w-64 shrink-0 border-r border-fb-border bg-fb-surface overflow-y-auto">
       <div className="px-4 py-4 border-b border-fb-border">
-        <h2 className="text-xl font-bold text-fb-text">Marketplace</h2>
+        <h2 className="text-xl font-bold text-fb-text">ChainMart</h2>
         <p className="text-xs text-fb-subtle mt-1">Buy and sell with stablecoins</p>
       </div>
 

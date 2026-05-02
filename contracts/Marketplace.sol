@@ -4,13 +4,22 @@ pragma solidity ^0.8.24;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 /// @title P2P Stablecoin Marketplace with Escrow
 /// @notice Lets sellers list items priced in ERC-20 stablecoins and buyers
 ///         purchase via a smart contract escrow that releases funds only on
 ///         buyer confirmation, seller refund, or admin dispute resolution.
-contract Marketplace is ReentrancyGuard, Ownable {
+/// @dev    UUPS-upgradeable. Deploy behind an ERC1967 proxy and call
+///         `initialize(initialOwner)`.
+contract Marketplace is
+    Initializable,
+    ReentrancyGuard,
+    OwnableUpgradeable,
+    UUPSUpgradeable
+{
     using SafeERC20 for IERC20;
 
     enum ListingStatus { Active, Paused, InEscrow, Sold, Cancelled }
@@ -39,8 +48,8 @@ contract Marketplace is ReentrancyGuard, Ownable {
         uint256 createdAt;
     }
 
-    uint256 public nextListingId = 1;
-    uint256 public nextEscrowId = 1;
+    uint256 public nextListingId;
+    uint256 public nextEscrowId;
 
     mapping(uint256 => Listing) private _listings;
     mapping(uint256 => Escrow) private _escrows;
@@ -66,11 +75,27 @@ contract Marketplace is ReentrancyGuard, Ownable {
     event DisputeRaised(uint256 indexed escrowId, address indexed by);
     event DisputeResolved(uint256 indexed escrowId, bool releasedToSeller);
 
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
+    function initialize(address initialOwner) external initializer {
+        __Ownable_init(initialOwner);
+
+        nextListingId = 1;
+        nextEscrowId = 1;
+    }
 
     // ---------------------------------------------------------------------
     // Admin
     // ---------------------------------------------------------------------
+
+    function _authorizeUpgrade(address newImplementation)
+        internal
+        override
+        onlyOwner
+    {}
 
     function setTokenAllowed(address token, bool allowed) external onlyOwner {
         require(token != address(0), "zero token");
@@ -283,4 +308,7 @@ contract Marketplace is ReentrancyGuard, Ownable {
             }
         }
     }
+
+    /// @dev Reserved storage slots for future upgrades.
+    uint256[50] private __gap;
 }
