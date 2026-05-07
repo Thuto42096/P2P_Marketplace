@@ -1,11 +1,14 @@
-import { useParams, Link } from "react-router-dom";
-import { useAccount, useReadContract } from "wagmi";
+import { useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useAccount, useChainId, useReadContract } from "wagmi";
 import {
   useListing,
   useTokenMeta,
   useContractAddresses,
 } from "../hooks/useMarketplace.js";
 import { useTxButton } from "../hooks/useTxButton.js";
+import { useChatAuth } from "../hooks/useChat.js";
+import { chatApi } from "../lib/chatApi.js";
 import {
   marketplaceAbi,
   erc20Abi,
@@ -28,10 +31,15 @@ function resolveImage(uri) {
 
 export default function ListingDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { address: account } = useAccount();
+  const chainId = useChainId();
   const { marketplace } = useContractAddresses();
   const { data: listing, isLoading, refetch } = useListing(id);
   const { symbol, decimals } = useTokenMeta(listing?.paymentToken);
+  const { token: chatToken, isAuthed: isChatAuthed, signIn: chatSignIn } = useChatAuth();
+  const [contactBusy, setContactBusy] = useState(false);
+  const [contactError, setContactError] = useState(null);
 
   // Allowance check
   const { data: allowance, refetch: refetchAllowance } = useReadContract({
@@ -85,6 +93,26 @@ export default function ListingDetail() {
       functionName: "buyItem",
       args: [listing.id],
     });
+
+  async function onContactSeller() {
+    setContactError(null);
+    setContactBusy(true);
+    try {
+      let token = chatToken;
+      if (!isChatAuthed) token = await chatSignIn();
+      const { conversation } = await chatApi.getOrCreateConversation(token, {
+        chainId: Number(chainId) || 1,
+        listingId: Number(listing.id),
+        listingTitle: listing.name,
+        peer: listing.seller,
+      });
+      navigate(`/messages/${conversation.id}`);
+    } catch (err) {
+      setContactError(err.shortMessage || err.message);
+    } finally {
+      setContactBusy(false);
+    }
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -163,6 +191,20 @@ export default function ListingDetail() {
               </Link>
               .
             </p>
+          )}
+
+          {account && !isSeller && (
+            <button
+              type="button"
+              onClick={onContactSeller}
+              disabled={contactBusy}
+              className="mt-3 w-full py-3 rounded-lg bg-fb-bg text-fb-text font-medium hover:bg-fb-border disabled:opacity-60"
+            >
+              {contactBusy ? "Opening chat…" : "💬 Contact seller"}
+            </button>
+          )}
+          {contactError && (
+            <p className="mt-2 text-sm text-fb-danger">{contactError}</p>
           )}
         </div>
       </aside>

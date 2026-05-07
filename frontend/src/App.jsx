@@ -6,6 +6,7 @@ import ListingDetail from "./pages/ListingDetail.jsx";
 import CreateListing from "./pages/CreateListing.jsx";
 import SellerDashboard from "./pages/SellerDashboard.jsx";
 import BuyerDashboard from "./pages/BuyerDashboard.jsx";
+import Messages from "./pages/Messages.jsx";
 import Login from "./pages/Login.jsx";
 
 function RequireWallet({ children }) {
@@ -42,6 +43,8 @@ export default function App() {
                 <Route path="/sell" element={<SellerDashboard />} />
                 <Route path="/sell/new" element={<CreateListing />} />
                 <Route path="/buy" element={<BuyerDashboard />} />
+                <Route path="/messages" element={<Messages />} />
+                <Route path="/messages/:id" element={<Messages />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Layout>

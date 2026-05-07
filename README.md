@@ -7,6 +7,8 @@ admin resolves a dispute.
 
 - **Contracts:** Solidity 0.8.24, Hardhat, OpenZeppelin (UUPS-upgradeable)
 - **Frontend:** React 19 + Vite, Tailwind CSS, wagmi v2 + viem
+- **Chat backend:** Node + Express + Socket.IO + SQLite, with Sign-In With
+  Ethereum (SIWE) for wallet authentication
 - **Networks:** Hardhat / localhost, Ethereum Sepolia (out of the box; mainnet,
   Polygon, Base, Arbitrum are wired in the wagmi config)
 
@@ -18,6 +20,7 @@ scripts/           deploy.js, syncFrontend.js
 test/              Hardhat tests (Marketplace + Escrow flows)
 deployments/       Per-network deployment manifests (e.g. sepolia.json)
 frontend/          Vite/React app (pages, hooks, wagmi config)
+backend/           Off-chain chat service (Express + Socket.IO + SQLite + SIWE)
 ```
 
 ## Smart contract overview
@@ -53,6 +56,9 @@ npm install
 
 # Frontend
 cd frontend && npm install && cd ..
+
+# Chat backend
+cd backend && npm install && cp .env.example .env && cd ..
 ```
 
 Create a `.env` at the repo root for non-local deploys:
@@ -125,10 +131,39 @@ for the active chain, the UI shows a "no contract" banner.
 Pages:
 
 - **Browse** — active listings, search, click-through to detail
-- **Listing detail** — approve + buy, view escrow status
+- **Listing detail** — approve + buy, view escrow status, *Contact seller* (chat)
 - **Selling** — create / pause / cancel listings, refund buyers
 - **Buying** — your escrows, confirm receipt, dispute
+- **Messages** — per-listing buyer↔seller threads (real-time via WebSocket)
 - **Login** — wallet connect (injected + Coinbase Wallet)
+
+## Chat backend
+
+A small Node service powers the in-app chat between buyers and sellers. It
+authenticates wallets via [Sign-In With Ethereum](https://eips.ethereum.org/EIPS/eip-4361),
+issues a JWT, persists conversations + messages in SQLite, and pushes new
+messages over Socket.IO.
+
+```bash
+cd backend
+cp .env.example .env   # adjust PORT, CORS_ORIGIN, JWT_SECRET, SIWE_DOMAIN
+npm run dev            # http://localhost:4000 (HTTP + WebSocket)
+```
+
+The frontend reads `VITE_CHAT_API_URL` (default `http://localhost:4000`). When a
+user clicks **Contact seller** on a listing, the app prompts a one-time SIWE
+signature, opens (or finds) a per-listing thread keyed by
+`(chainId, listingId, {buyer, seller})`, and navigates to `/messages/:id`.
+
+Endpoints:
+
+- `GET /auth/nonce`, `POST /auth/verify` — SIWE login → JWT
+- `GET /me`
+- `GET /conversations`, `POST /conversations` (create or fetch by listing+peer)
+- `GET /conversations/:id/messages?before=&limit=`
+- `POST /conversations/:id/read`
+- Socket.IO events: `conversation:join`, `message:send`, `message:new`,
+  `message:read`
 
 ## Available scripts (root)
 

@@ -5,6 +5,16 @@
       "address": "0xD1BeB8044001B3731f6bc2841f256810EC029d9C",
       "txHash": "0x138fa09f5a785c9bd94806246c5662650ddf7d2089fd340b755b1d039ae6befc",
       "kind": "uups"
+    },
+    {
+      "address": "0x45EA64A553d3c7Ab0413Dd759696B502EA5ed340",
+      "txHash": "0x67645a2009d3db150da480b2cb84edecfef310c5a726d82d0e49e7e1a4cf4751",
+      "kind": "uups"
+    },
+    {
+      "address": "0xe61ddE6E49c816F83e339B05F44e7C60cE2a6180",
+      "txHash": "0xbedf671c9e17498f0b7a43011c2eec412b5c50fe8d5253db06c8bc5b37d6ed2c",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -265,6 +275,347 @@
           "t_uint256": {
             "label": "uint256",
             "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "67a2872e323d01877890e24df8eb1714cb388727ed8896e2b7dd7d9477611737": {
+      "address": "0xDc514FD71549d4B155C7d261341A26BdDa2DB565",
+      "txHash": "0x23508657d039ec433d3209169c405521a44e3c7a8308e3526310e39797083a97",
+      "layout": {
+        "solcVersion": "0.8.24",
+        "storage": [
+          {
+            "label": "nextListingId",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:76"
+          },
+          {
+            "label": "nextEscrowId",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:77"
+          },
+          {
+            "label": "_listings",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_mapping(t_uint256,t_struct(_StoredListing)2558_storage)",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:79"
+          },
+          {
+            "label": "_escrows",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_mapping(t_uint256,t_struct(_StoredEscrow)2569_storage)",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:80"
+          },
+          {
+            "label": "allowedTokens",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:81"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:389"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)307_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)13_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_enum(EscrowStatus)2499": {
+            "label": "enum Marketplace.EscrowStatus",
+            "members": [
+              "None",
+              "Pending",
+              "Released",
+              "Refunded",
+              "Disputed"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_enum(ListingStatus)2493": {
+            "label": "enum Marketplace.ListingStatus",
+            "members": [
+              "Active",
+              "Paused",
+              "InEscrow",
+              "Sold",
+              "Cancelled"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(_StoredEscrow)2569_storage)": {
+            "label": "mapping(uint256 => struct Marketplace._StoredEscrow)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(_StoredListing)2558_storage)": {
+            "label": "mapping(uint256 => struct Marketplace._StoredListing)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(_StoredEscrow)2569_storage": {
+            "label": "struct Marketplace._StoredEscrow",
+            "members": [
+              {
+                "label": "buyer",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "listingId",
+                "type": "t_uint48",
+                "offset": 20,
+                "slot": "0"
+              },
+              {
+                "label": "createdAt",
+                "type": "t_uint40",
+                "offset": 26,
+                "slot": "0"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(EscrowStatus)2499",
+                "offset": 31,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(_StoredListing)2558_storage": {
+            "label": "struct Marketplace._StoredListing",
+            "members": [
+              {
+                "label": "seller",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "activeEscrowId",
+                "type": "t_uint88",
+                "offset": 20,
+                "slot": "0"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ListingStatus)2493",
+                "offset": 31,
+                "slot": "0"
+              },
+              {
+                "label": "paymentToken",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "price",
+                "type": "t_uint96",
+                "offset": 20,
+                "slot": "1"
+              },
+              {
+                "label": "name",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "description",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "imageURI",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "4"
+              }
+            ],
+            "numberOfBytes": "160"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint40": {
+            "label": "uint40",
+            "numberOfBytes": "5"
+          },
+          "t_uint48": {
+            "label": "uint48",
+            "numberOfBytes": "6"
+          },
+          "t_uint88": {
+            "label": "uint88",
+            "numberOfBytes": "11"
+          },
+          "t_uint96": {
+            "label": "uint96",
+            "numberOfBytes": "12"
+          },
+          "t_mapping(t_uint256,t_struct$__StoredListing)2558_storage)": {
+            "label": "mapping(uint256 => struct Marketplace._StoredListing)"
+          },
+          "t_struct$__StoredListing)2558_storage": {
+            "label": "struct Marketplace._StoredListing",
+            "members": [
+              {
+                "label": "seller",
+                "type": "t_address"
+              },
+              {
+                "label": "activeEscrowId",
+                "type": "t_uint88"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(ListingStatus)2493"
+              },
+              {
+                "label": "paymentToken",
+                "type": "t_address"
+              },
+              {
+                "label": "price",
+                "type": "t_uint96"
+              },
+              {
+                "label": "name",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "description",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "imageURI",
+                "type": "t_string_storage"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_struct$__StoredEscrow)2569_storage)": {
+            "label": "mapping(uint256 => struct Marketplace._StoredEscrow)"
+          },
+          "t_struct$__StoredEscrow)2569_storage": {
+            "label": "struct Marketplace._StoredEscrow",
+            "members": [
+              {
+                "label": "buyer",
+                "type": "t_address"
+              },
+              {
+                "label": "listingId",
+                "type": "t_uint48"
+              },
+              {
+                "label": "createdAt",
+                "type": "t_uint40"
+              },
+              {
+                "label": "status",
+                "type": "t_enum(EscrowStatus)2499"
+              }
+            ]
           }
         },
         "namespaces": {

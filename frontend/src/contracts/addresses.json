@@ -1,6 +1,11 @@
 {
+  "31337": {
+    "marketplace": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "stablecoin": "0x20Fd547e7512C77C41B17dEe64b577b06D89Bc91",
+    "network": "hardhat"
+  },
   "11155111": {
-    "marketplace": "0xD1BeB8044001B3731f6bc2841f256810EC029d9C",
+    "marketplace": "0xe61ddE6E49c816F83e339B05F44e7C60cE2a6180",
     "stablecoin": "0x20Fd547e7512C77C41B17dEe64b577b06D89Bc91",
     "network": "sepolia"
   }

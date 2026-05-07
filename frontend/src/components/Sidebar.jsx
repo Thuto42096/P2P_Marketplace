@@ -4,6 +4,7 @@ const navItems = [
   { to: "/", label: "Browse all", icon: "🛒", end: true },
   { to: "/sell", label: "Selling", icon: "🏷️" },
   { to: "/buy", label: "Buying", icon: "📦" },
+  { to: "/messages", label: "Messages", icon: "💬" },
   { to: "/sell/new", label: "Create new listing", icon: "➕", primary: true },
 ];
 
